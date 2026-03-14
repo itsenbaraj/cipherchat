@@ -6,4 +6,4 @@ __pycache__/
 .env
 venv/
 .venv/
-gunicorn==21.2.0
+
