@@ -1,0 +1,8 @@
+database.db
+encryption.key
+__pycache__/
+*.pyc
+*.pyo
+.env
+venv/
+.venv/

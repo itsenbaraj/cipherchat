@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: cipherchat-backend
+    runtime: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn --worker-class eventlet -w 1 app:app
+    envVars:
+      - key: SECRET_KEY
+        generateValue: true
+      - key: FERNET_KEY
+        value: ajFNbzg2ZTIzblhRMnZremFSQkVZaHRiWUg5cFE2Yi1qaFBfclU4YnQwYz0=
