@@ -546,8 +546,10 @@ def get_pinned():
 # ═════════════════════════════════════════════════════════════
 # RUN
 # ═════════════════════════════════════════════════════════════
+# Initialize DB on startup (works with both gunicorn and direct run)
+init_db()
+
 if __name__ == '__main__':
-    init_db()
     print("\n🔒 CipherChat Backend")
     print("📡 Running at  → http://localhost:5000")
     print("─" * 44)
