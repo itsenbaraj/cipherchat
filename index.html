@@ -254,15 +254,18 @@ html,body{height:100%;font-family:var(--f);background:var(--bg);color:var(--t1);
     </div>
     <div class="login-card">
       <div class="err-box hidden" id="loginErr"><i class="fa-solid fa-circle-exclamation"></i><span id="loginErrTxt"></span></div>
-      <div class="field">
-        <label>Username</label>
-        <div class="inp-wrap"><i class="fa-regular fa-user"></i><input type="text" id="loginUser" placeholder="Enter your username" autocomplete="username"/></div>
-      </div>
-      <div class="field">
-        <label>Password</label>
-        <div class="inp-wrap"><i class="fa-solid fa-lock"></i><input type="password" id="loginPass" placeholder="Enter your password" autocomplete="current-password"/><button class="toggle-pass" id="togglePass" type="button"><i class="fa-regular fa-eye" id="eyeIcon"></i></button></div>
-      </div>
-      <button class="submit-btn" id="loginBtn">Sign In</button>
+      <!-- FIX: password input is now inside a <form> tag — resolves the DOM warning -->
+      <form id="loginForm" onsubmit="event.preventDefault(); doLogin();" autocomplete="on">
+        <div class="field">
+          <label for="loginUser">Username</label>
+          <div class="inp-wrap"><i class="fa-regular fa-user"></i><input type="text" id="loginUser" name="username" placeholder="Enter your username" autocomplete="username"/></div>
+        </div>
+        <div class="field">
+          <label for="loginPass">Password</label>
+          <div class="inp-wrap"><i class="fa-solid fa-lock"></i><input type="password" id="loginPass" name="password" placeholder="Enter your password" autocomplete="current-password"/><button class="toggle-pass" id="togglePass" type="button"><i class="fa-regular fa-eye" id="eyeIcon"></i></button></div>
+        </div>
+        <button type="submit" class="submit-btn" id="loginBtn">Sign In</button>
+      </form>
     </div>
     <p class="login-hint">🔐 End-to-end encrypted · Private · Secure</p>
   </div>
@@ -402,10 +405,7 @@ window.addEventListener('DOMContentLoaded',async()=>{
 
 $('togglePass').addEventListener('click',()=>{const inp=$('loginPass');inp.type=inp.type==='password'?'text':'password';$('eyeIcon').className=inp.type==='text'?'fa-regular fa-eye-slash':'fa-regular fa-eye';});
 $('loginUser').addEventListener('keydown',e=>{if(e.key==='Enter')$('loginPass').focus();});
-$('loginPass').addEventListener('keydown',e=>{if(e.key==='Enter')doLogin();});
-$('loginBtn').addEventListener('click',doLogin);
 
-function showLoginErr(msg){const box=$('loginErr');$('loginErrTxt').textContent=msg;box.classList.remove('hidden','shake');void box.offsetWidth;box.classList.add('shake');}
 async function doLogin(){
   const username=$('loginUser').value.trim(),password=$('loginPass').value;
   if(!username||!password){showLoginErr('Please fill in all fields.');return;}
@@ -414,6 +414,7 @@ async function doLogin(){
   catch{showLoginErr('Cannot connect to server. Is the backend running?');}
   finally{btn.disabled=false;btn.innerHTML='Sign In';}
 }
+function showLoginErr(msg){const box=$('loginErr');$('loginErrTxt').textContent=msg;box.classList.remove('hidden','shake');void box.offsetWidth;box.classList.add('shake');}
 
 $('logoutBtn').addEventListener('click',async()=>{
   if(socket)socket.disconnect();
